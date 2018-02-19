@@ -1,7 +1,8 @@
 from sage.all_cmdline import *   # import sage library
+from vig import *
 
-import os
-os.system("sage vig.sage.py")
+# import os
+# os.system("sage vig.sage.py")
 
 #tokenize is shared by all functions
 #raw_file is a file with the message to be encrypted
@@ -57,4 +58,4 @@ def enc_trans(key, plain_txt, cipher_txt):
 def dec_trans(key, cipher_txt, plain_txt):
     return
 
-vig.sage.sayHello()
+sayHello()
