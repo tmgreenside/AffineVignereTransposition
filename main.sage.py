@@ -38,3 +38,4 @@ key = key_gen_vig(5)
 print "Key: " + key
 
 enc_vig(key, "plain_text.txt", "cipher_text.txt")
+dec_vig(key, "cipher_text.txt", "plain_text_2.txt")

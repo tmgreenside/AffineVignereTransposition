@@ -26,10 +26,12 @@ def enc_vig(key, plain_txt, cipher_txt):
             break
         for char in line:
             if char.isalpha():
-                cryptoline += chr((ord(char) + ord(key[indKey])) // 26)
+                cryptoline += chr(((ord(char) + ord(key[indKey])) % 26) + 65)
                 indKey = (indKey + 1) // lenKey
             else:
                 cryptoline += char
+        print line
+        print cryptoline
         cipher.write(cryptoline)
     plain.close()
     cipher.close()
@@ -38,4 +40,24 @@ def enc_vig(key, plain_txt, cipher_txt):
 # reads and decrypts cipher_txt using the vigenere cipher and key. writes
 # the output to the file plain_txt
 def dec_vig(key, cipher_txt, plain_txt):
+    plain = open(plain_txt, "w")
+    cipher = open(cipher_txt, "r")
+    lenKey = len(key)
+    indKey = 0 # index in key string
+    while True:
+        line = cipher.readline()
+        decLine = "" # decrypted line
+        if not line:
+            break
+        for char in line:
+            if char.isalpha():
+                decLine += chr(((ord(char) - ord(key[indKey])) % 26) + 65)
+                indKey = (indKey + 1) // lenKey
+            else:
+                decLine += char
+        print line
+        print decLine
+        plain.write(decLine)
+    plain.close()
+    cipher.close()
     return
