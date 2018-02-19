@@ -1,3 +1,5 @@
+from sage.all_cmdline import *   # import sage library
+
 # returns a randomly generated vigenere key of length, "key_length".
 def key_gen_vig(key_length):
     return
