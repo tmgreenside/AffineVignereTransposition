@@ -15,10 +15,6 @@ def tokenize(raw_file, plain_txt):
             if char.isalpha():
                 writeline += char.upper()
                 chars += 1
-            else:
-                if char != ' ' and char != '_' and char != '\n' and char != '\t':
-                    writeline += char
-                    chars += 1
             if chars >= 50:
                 writeline += '\n'
                 chars = 0

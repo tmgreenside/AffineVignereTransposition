@@ -1,5 +1,6 @@
 from sage.all_cmdline import *   # import sage library
 from vig import *
+from aff import *
 from tokenize import *
 
 #tokenize is shared by all functions
@@ -31,7 +32,11 @@ from tokenize import *
 #     plain.close()
 #     return
 
-
+#Max's test
+x = key_gen_aff()
+e = enc_aff(x, "plain.txt",'cipher.txt')
+d = dec_aff(x,"cipher.txt","plain.txt")
+print d
 tokenize("message.txt", "plain_text.txt")
 
 # Trevor tests
