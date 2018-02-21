@@ -30,8 +30,6 @@ def enc_vig(key, plain_txt, cipher_txt):
                 indKey = (indKey + 1) // lenKey
             else:
                 cryptoline += char
-        print line
-        print cryptoline
         cipher.write(cryptoline)
     plain.close()
     cipher.close()
@@ -55,8 +53,6 @@ def dec_vig(key, cipher_txt, plain_txt):
                 indKey = (indKey + 1) // lenKey
             else:
                 decLine += char
-        print line
-        print decLine
         plain.write(decLine)
     plain.close()
     cipher.close()
