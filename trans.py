@@ -3,13 +3,15 @@
 from sage.all_cmdline import *   # import sage library
 import random
 
-
 # returns a randomly generated upper-case alphabet
 def key_gen_trans():
     alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     #create permutation of alphabet
-	perm = [ord(x)-64 for x in alphabet]
-
+    enumAlpha = [ord(x)-64 for x in alphabet]
+    perm = ""
+    shuffle(enumAlpha)
+    for i in enumAlpha:
+        perm += chr(i + 64)
     return perm
 
 #takes a string and turns it into a numeric list
@@ -18,7 +20,11 @@ def str21st(s):
 
 #takes a list and turns it back into a string
 def lst2str(lst):
-	return join([chr(int(x)+65) for x in lst],'')
+
+    currStr = ""
+    for x in lst:
+        currStr += str(chr(ord(x) + 65))
+    return currStr
 
 
 # reads and encrypts plain_txt using the alphabetic transposition cipher and
@@ -27,37 +33,22 @@ def lst2str(lst):
 #take list and turns back to string
 def enc_trans(perm, plain_txt, cipher_txt):
     #open plain_txt to read
-	plain = open(plain_txt, "r")
+    plain = open(plain_txt, "r")
     #open cipher_txt to write
     cipher = open(cipher_txt, "w")
 
-    '''
-     #turns string into numeric list
-    pln = str21st(plain)
-    plr = [perm[pln[i]]-1 for i in range(len(pl))]
-
-    #take list and turns back to string
-    lst2str(plr)
-
-    #need to save plr to cipher_txt
-    cipher.write(plr)
-    '''
-
     while True:
         currLine = plain.readline()
-        #make string currLine into a list
-        #pass through str21st()
-
-        pln = str21st(currLine) #turns string into numeric list
-        plr = [perm[pln[i]]-1 for i in range(len(currLine))]
-
-        #take list and turns back to string
-        lst2str(plr)
-
-        #need to save plr to cipher_txt
-        cipher.write(plr)
-
-
+        if not currLine:
+            break
+        print currLine
+        cipherline = ""
+        for char in currLine:
+            if char.isalpha():
+                #print ord(char) - 65
+                cipherline += perm[ord(char) - 65]
+        cipherline += "\n"
+        cipher.write(cipherline)
 
     plain.close()
     cipher.close()
@@ -72,18 +63,23 @@ def dec_trans(key, cipher_txt, plain_txt):
     #open plain_txt to write to
     plain = open(plain_txt, "w")
 
-    while True:
-        currLine = plain.readline()
+    print "Decrypting"
 
+    while True:
+        currLine = cipher.readline()
+        if not currLine:
+            break
+        print currLine
         #inverse permutation
         #Sage has this functionality
-        inverseKey = Permutation(key).inverse()
+        decryptline = ""
+        for char in currLine:
+            if char.isalpha():
+                decryptline += chr(key.find(char) + 65)
 
-        pls = [inverseKey[currLine[i]]-1 for i in range((currLine))]
-
-        lst2str(pls)
-
-        plain.write(pls)
+        print decryptline
+        decryptline += "\n"
+        plain.write(decryptline)
 
     plain.close()
     cipher.close()

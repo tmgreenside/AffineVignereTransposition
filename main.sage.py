@@ -2,6 +2,7 @@ from sage.all_cmdline import *   # import sage library
 from vig import *
 from aff import *
 from tokenize import *
+from trans import *
 
 #tokenize is shared by all functions
 #raw_file is a file with the message to be encrypted
@@ -33,23 +34,23 @@ from tokenize import *
 #     return
 
 #Max's test
-x = key_gen_aff()
-e = enc_aff(x, "plain.txt",'cipher.txt')
-d = dec_aff(x,"cipher.txt","plain.txt")
-print d
-tokenize("message.txt", "plain_text.txt")
-
-# Trevor tests
-key = key_gen_vig(5)
-print "Key: " + key
-
-enc_vig(key, "plain_text.txt", "cipher_text.txt")
-dec_vig(key, "cipher_text.txt", "plain_text_2.txt")
+# x = key_gen_aff()
+# e = enc_aff(x, "plain.txt",'cipher.txt')
+# d = dec_aff(x,"cipher.txt","plain.txt")
+# print d
+# tokenize("message.txt", "plain_text.txt")
+#
+# # Trevor tests
+# key = key_gen_vig(5)
+# print "Key: " + key
+#
+# enc_vig(key, "plain_text.txt", "cipher_text.txt")
+# dec_vig(key, "cipher_text.txt", "plain_text_2.txt")
 
 # Sammy tests
 tokenize("message.txt", "plain_txt.txt")
 
 key = key_gen_trans()
 print "Key: " + key
-enc_trans(key, "plain_txt.txt", "cipher_text.txt")
-dec_trans(x,"cipher.txt","plain.txt")
+enc_trans(key, "plain_txt.txt", "cipher_txt.txt")
+dec_trans(key,"cipher_txt.txt","plain.txt")
