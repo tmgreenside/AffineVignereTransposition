@@ -34,9 +34,11 @@ from trans import *
 #     return
 
 #Max's test
-# x = key_gen_aff()
-# e = enc_aff(x, "plain.txt",'cipher.txt')
-# d = dec_aff(x,"cipher.txt","plain.txt")
+x = key_gen_aff()
+e = enc_aff(x, "plain.txt",'cipher.txt')
+print e
+d = dec_aff(x,"cipher.txt","plain.txt")
+print d
 # print d
 # tokenize("message.txt", "plain_text.txt")
 #
@@ -48,9 +50,9 @@ from trans import *
 # dec_vig(key, "cipher_text.txt", "plain_text_2.txt")
 
 # Sammy tests
-tokenize("message.txt", "plain_txt.txt")
+#tokenize("message.txt", "plain_txt.txt")
 
-key = key_gen_trans()
-print "Key: " + key
-enc_trans(key, "plain_txt.txt", "cipher_txt.txt")
-dec_trans(key,"cipher_txt.txt","plain.txt")
+#key = key_gen_trans()
+#print "Key: " + key
+#enc_trans(key, "plain_txt.txt", "cipher_txt.txt")
+#dec_trans(key,"cipher_txt.txt","plain.txt")

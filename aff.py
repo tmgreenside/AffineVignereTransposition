@@ -7,7 +7,7 @@ def key_gen_aff():
 
     #print inverse_mod(3,59)
     x = gen_key()
-    b = rand.randint(0,100)
+    b = rand.randint(0,25)
     return (x,b)
 
 #Generates an x value that is co prime to m
@@ -25,25 +25,12 @@ def enc_aff(key, plain_txt, cipher_txt):
         plain_txt = f.read()
 
     #plain_txt = tokenize(plain_txt)
-    ci = ""
-    for char in plain_txt:
-        if(char.isdigit() or char.isalpha()):
-            ci += char
-    plain_txt = ci
     x = key[0]
     b = key[1]
     alpha_size = 26
-    plain_txt = plain_txt.replace(" ","")
     total_string = ""
     for char in plain_txt:
-        if(char.isalpha()):
-            base_char = ord(char) - 65
-        elif(char.isdigit()):
-            #assumes integer
-            base_char = ord(char) - 48
-        else:
-            break
-
+        base_char = ord(char) - 65
         enc_char = ((base_char * x) +b) % alpha_size
         total_string += chr(int(enc_char)+65)
     encfile = open(cipher_txt,"w")
@@ -55,27 +42,17 @@ def enc_aff(key, plain_txt, cipher_txt):
 def dec_aff(key, cipher_txt, plain_txt):
     with open(cipher_txt,'r') as f:
         cipher_txt = f.read()
-    ci = ""
 
-    for char in cipher_txt:
-        if(char.isdigit() or char.isalpha()):
-            ci += char
-
-    cipher_txt = ci
-    print cipher_txt
     mult_i = inverse_mod(key[0],26)
     b = key[1]
     alpha_size = 26
     cipher_txt = cipher_txt.replace(" ","")
     total_string = ""
     for char in cipher_txt:
-        if(char.isalpha()):
-            base_char = ord(char) - 65
-        else:
-            #assumes integer
-            base_char = ord(char) - 48
+        base_char = ord(char) - 65
         enc_char = (mult_i*(base_char-b)) % alpha_size
         total_string += chr(int(enc_char)+65)
+
     encfile = open(plain_txt,"w")
     encfile.write(total_string)
     return total_string
