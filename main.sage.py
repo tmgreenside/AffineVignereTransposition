@@ -45,3 +45,11 @@ print "Key: " + key
 
 enc_vig(key, "plain_text.txt", "cipher_text.txt")
 dec_vig(key, "cipher_text.txt", "plain_text_2.txt")
+
+# Sammy tests
+tokenize("message.txt", "plain_txt.txt")
+
+key = key_gen_trans()
+print "Key: " + key
+enc_trans(key, "plain_txt.txt", "cipher_text.txt")
+dec_trans(x,"cipher.txt","plain.txt")
