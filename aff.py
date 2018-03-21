@@ -51,7 +51,9 @@ def dec_aff(key, cipher_txt, plain_txt):
     for char in cipher_txt:
         base_char = ord(char) - 65
         enc_char = (mult_i*(base_char-b)) % alpha_size
+        print total_string
         total_string += chr(int(enc_char)+65)
+
 
     encfile = open(plain_txt,"w")
     encfile.write(total_string)
