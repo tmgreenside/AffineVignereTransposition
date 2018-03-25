@@ -1,0 +1,234 @@
+"""
+group members: Max Dulin, Trevor Greenside, Sammy Vowles
+asgn: Project 4: Three Classic Ciphers
+date: 20 March 2018
+course: CPSC 353
+"""
+
+from sage.all_cmdline import *   # import sage library
+import random as rand
+
+# tokenize
+
+#raw_file is a file with the message to be encrypted
+#plain_txt is raw_file with alpha chars transformed to uppercase, white space
+#removed, and eol inserted every fifty characters.
+def tokenize(raw_file, plain_txt):
+    raw = open(raw_file,"r")
+    plain = open(plain_txt, "w")
+    chars = 0
+    writeline = ""
+    while True:
+        line = raw.readline()
+        if not line:
+            break
+        for char in line:
+            if char.isalpha():
+                writeline += char.upper()
+                chars += 1
+            if chars >= 50:
+                writeline += '\n'
+                chars = 0
+    plain.write(writeline)
+    raw.close()
+    plain.close()
+    return
+
+# AFFINE CIPHER
+
+# returns a two-tuple containing alpha and beta, legal and randomly generated
+# affine keys
+def key_gen_aff():
+    alpha_size = 26
+
+    #print inverse_mod(3,59)
+    x = gen_key()
+    b = rand.randint(0,25)
+    return (x,b)
+
+#Generates an x value that is co prime to m
+def gen_key():
+    num = 0
+    while(True):
+        num = rand.randint(2,26)
+        if(gcd(num,26) == 1):
+            return num
+
+# reads and encrypts plain_txt using the affine cipher and key. writes the
+# output to the file cipher_txt
+def enc_aff(key, plain_txt, cipher_txt):
+    with open(plain_txt,'r') as f:
+        plain_txt = f.read()
+
+    x = key[0]
+    b = key[1]
+    alpha_size = 26
+    total_string = ""
+    for char in plain_txt:
+        base_char = ord(char) - 65
+        enc_char = ((base_char * x) +b) % alpha_size
+
+        total_string += chr(int(enc_char)+65)
+    encfile = open(cipher_txt,"w")
+    encfile.write(total_string)
+    return total_string
+
+# reads and decrypts cipher_txt using the affine cipher and key. writes the
+# output to the file plain_txt
+def dec_aff(key, cipher_txt, plain_txt):
+    with open(cipher_txt,'r') as f:
+        cipher_txt = f.read()
+
+    mult_i = inverse_mod(key[0],26)
+    b = key[1]
+    alpha_size = 26
+    cipher_txt = cipher_txt.replace(" ","")
+    total_string = ""
+    for char in cipher_txt:
+        base_char = ord(char) - 65
+        enc_char = (mult_i*(base_char-b)) % alpha_size
+
+        total_string += chr(int(enc_char)+65)
+
+    encfile = open(plain_txt,"w")
+    encfile.write(total_string)
+    return total_string
+
+# VIGNERE cipher
+
+# returns a randomly generated vigenere key of length, "key_length".
+def key_gen_vig(key_length):
+    key = ""
+    for i in range(key_length):
+        while True:
+            letter = chr(rand.randint(0,25) + 65)
+            if letter not in key:
+                key += letter
+                break
+    return key
+
+# reads and encrypts plain_txt using the vigenere cipher and key. writes the
+# output to the file cipher_txt
+def enc_vig(key, plain_txt, cipher_txt):
+    plain = open(plain_txt, "r")
+    cipher = open(cipher_txt, "w")
+    lenKey = len(key)
+    indKey = 0 # index in key string
+    while True:
+        line = plain.readline()
+        cryptoline = ""
+        if not line:
+            break
+        for char in line:
+            if char.isalpha():
+                cryptoline += chr(((ord(char) + ord(key[indKey])) % 26) + 65)
+                indKey = (indKey + 1) // lenKey
+            else:
+                cryptoline += char
+        cipher.write(cryptoline)
+    plain.close()
+    cipher.close()
+    return
+
+# reads and decrypts cipher_txt using the vigenere cipher and key. writes
+# the output to the file plain_txt
+def dec_vig(key, cipher_txt, plain_txt):
+    plain = open(plain_txt, "w")
+    cipher = open(cipher_txt, "r")
+    lenKey = len(key)
+    indKey = 0 # index in key string
+    while True:
+        line = cipher.readline()
+        decLine = "" # decrypted line
+        if not line:
+            break
+        for char in line:
+            if char.isalpha():
+                decLine += chr(((ord(char) - ord(key[indKey])) % 26) + 65)
+                indKey = (indKey + 1) // lenKey
+            else:
+                decLine += char
+        plain.write(decLine)
+    plain.close()
+    cipher.close()
+    return
+
+# TRANSPOSITION cipher
+
+# returns a randomly generated upper-case alphabet
+def key_gen_trans():
+    alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    #create permutation of alphabet
+    enumAlpha = [ord(x)-64 for x in alphabet]
+    perm = ""
+    shuffle(enumAlpha)
+    for i in enumAlpha:
+        perm += chr(i + 64)
+    return perm
+
+#takes a string and turns it into a numeric list
+def str21st(s):
+	return [ord(x)-65 for x in s]
+
+#takes a list and turns it back into a string
+def lst2str(lst):
+
+    currStr = ""
+    for x in lst:
+        currStr += str(chr(ord(x) + 65))
+    return currStr
+
+
+# reads and encrypts plain_txt using the alphabetic transposition cipher and
+# key and writes the output to the file cipher_txt.  A dictionary will be
+# useful.
+#take list and turns back to string
+def enc_trans(perm, plain_txt, cipher_txt):
+    #open plain_txt to read
+    plain = open(plain_txt, "r")
+    #open cipher_txt to write
+    cipher = open(cipher_txt, "w")
+
+    while True:
+        currLine = plain.readline()
+        if not currLine:
+            break
+        cipherline = ""
+        for char in currLine:
+            if char.isalpha():
+                #print ord(char) - 65
+                cipherline += perm[ord(char) - 65]
+        cipherline += "\n"
+        cipher.write(cipherline)
+
+    plain.close()
+    cipher.close()
+
+    return #plr #returns string of permuted plaintext
+
+# reads and decrypts cipher_txt using the alphabetic transpositon cipher and
+# key and writes the output to the file plain_txt
+def dec_trans(key, cipher_txt, plain_txt):
+    #open cipher_txt to read
+    cipher = open(cipher_txt, "r")
+    #open plain_txt to write to
+    plain = open(plain_txt, "w")
+
+    while True:
+        currLine = cipher.readline()
+        if not currLine:
+            break
+        #inverse permutation
+        #Sage has this functionality
+        decryptline = ""
+        for char in currLine:
+            if char.isalpha():
+                decryptline += chr(key.find(char) + 65)
+
+        decryptline += "\n"
+        plain.write(decryptline)
+
+    plain.close()
+    cipher.close()
+
+    return
